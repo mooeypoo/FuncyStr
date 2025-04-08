@@ -3,15 +3,6 @@
 import FuncyStr from '../src/FuncyStr.js';
 import { expect } from 'chai';
 
-const cases = [
-    {
-        title: 'should resolve a simple GENDER function',
-        input: "This is a {{GENDER|man|woman}}.",
-        params: { m: true },
-        expected: "This is a man."
-    }
-]
-
 describe('FuncyStr process', () => {
     const fstr = new FuncyStr({
         GENDER: (params, m, f) => (params.m ? m : f),
