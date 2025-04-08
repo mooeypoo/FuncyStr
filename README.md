@@ -68,7 +68,7 @@ Processes a string and resolves all placeholders.
 Run the test suite to ensure everything is working as expected:
 
 ```bash
-npm test
+npm run test
 ```
 
 ## License

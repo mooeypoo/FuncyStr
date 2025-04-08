@@ -1,0 +1,3 @@
+{
+    "reporter": [ "mocha-ctrf-json-reporter", "spec" ]
+}

@@ -2,7 +2,7 @@
   "name": "funcystr",
   "version": "1.0.0",
   "type": "module",
-  "source": "src/funcystr.js",
+  "source": "src/FuncyStr.js",
   "exports": {
     "require": "./dist/funcystr.cjs",
     "default": "./dist/funcystr.modern.js"
@@ -13,7 +13,7 @@
   "scripts": {
     "build": "microbundle",
     "dev": "microbundle watch",
-    "test": "mocha --require @babel/register"
+    "test": "mocha --require @babel/register --reporter mocha-multi-reporters --reporter-options configFile=config.json"
   },
   "author": "Moriel Schottlender <mooeypoo@gmail.com>",
   "license": "MIT",
@@ -25,6 +25,8 @@
     "@babel/register": "^7.25.9",
     "chai": "^5.2.0",
     "microbundle": "^0.15.1",
-    "mocha": "^11.1.0"
+    "mocha": "^11.1.0",
+    "mocha-ctrf-json-reporter": "^0.0.9",
+    "mocha-multi-reporters": "^1.5.1"
   }
 }
