@@ -1,0 +1,30 @@
+{
+  "name": "funcystr",
+  "version": "1.0.0",
+  "type": "module",
+  "source": "src/funcystr.js",
+  "exports": {
+    "require": "./dist/funcystr.cjs",
+    "default": "./dist/funcystr.modern.js"
+  },
+  "main": "./dist/funcystr.cjs",
+  "module": "./dist/funcystr.module.js",
+  "unpkg": "./dist/funcystr.umd.js",
+  "scripts": {
+    "build": "microbundle",
+    "dev": "microbundle watch",
+    "test": "mocha --require @babel/register"
+  },
+  "author": "Moriel Schottlender <mooeypoo@gmail.com>",
+  "license": "MIT",
+  "description": "A library that allows the creation and execution of functions within strings.",
+  "devDependencies": {
+    "@babel/cli": "^7.27.0",
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/register": "^7.25.9",
+    "chai": "^5.2.0",
+    "microbundle": "^0.15.1",
+    "mocha": "^11.1.0"
+  }
+}
