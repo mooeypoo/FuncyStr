@@ -1,5 +1,5 @@
-- name: Publish Test Report
-  uses: ctrf-io/github-test-reporter@v1
-  if: always()
-  with:
-    report-path: './ctrf/*.json'
+name: Publish Test Report
+uses: ctrf-io/github-test-reporter@v1
+if: always()
+with:
+  report-path: './ctrf/*.json'
