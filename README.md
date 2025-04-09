@@ -1,4 +1,7 @@
 # FuncyStr Library
+![Node.js CI](https://github.com/mooeypoo/FuncyStr/actions/workflows/test.yaml/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+
 
 FuncyStr is a lightweight JavaScript library designed to process strings with embedded functions. It allows dynamic string resolution based on provided parameters, supporting nested and multiple function calls within a single string.
 
