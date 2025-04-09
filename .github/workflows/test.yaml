@@ -1,0 +1,27 @@
+name: Node.js CI 
+on: 
+  push: 
+    branches: 
+      - main
+      - issue-* 
+  pull_request: 
+    branches:
+      - main
+      - issue-*
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with: 
+          node-version: '23' 
+      - run: npm install 
+      - run: npm test
+
+      - name: Publish Test Report
+        uses: ctrf-io/github-test-reporter@v1
+        if: always()
+        with:
+          report-path: './ctrf/*.json'
