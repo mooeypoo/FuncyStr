@@ -3,67 +3,97 @@
 import FuncyStr from '../src/FuncyStr.js';
 import { expect } from 'chai';
 
+const cases = [
+    {
+        name: 'should resolve a simple GENDER function',
+        test: {
+            input: 'This is a {{GENDER|man|woman}}.',
+            params: { m: true }
+        },
+        result: "This is a man."
+    },
+    {
+        name: 'should resolve a simple PLURAL function',
+        test: {
+            input: 'There is one {{PLURAL|apple|apples}}.',
+            params: { plural: true }
+        },
+        result: "There is one apples."
+    },
+    {
+        name: 'should resolve a replacement function that takes no inline values (CHAR_NAME)',
+        test: {
+            input: 'Hello, {{CHAR_NAME}}.',
+            params: { char_name: 'John' }
+        },
+        result: "Hello, John."
+    },
+    {
+        name: 'should resolve multiple and nested functions',
+        test: {
+            input: 'We see that {{PLURAL|this is|these are}} {{GENDER|{{PLURAL|a man|men}}|{{PLURAL|a woman|women}}}}.',
+            params: { m: true, plural: true }
+        },
+        result: 'We see that these are men.'
+    },
+    {
+        name: 'should handle missing function definitions gracefully',
+        test: {
+            input: 'This is a {{UNKNOWN|arg1|arg2}}.',
+            params: {}
+        },
+        result: 'This is a {{UNKNOWN|arg1|arg2}}.'
+    },
+    {
+        name: 'should handle empty strings',
+        test: {
+            input: '',
+            params: {}
+        },
+        result: ''
+    },
+    {
+        name: 'should handle strings without functions',
+        test: {
+            input: 'This is a plain string.',
+            params: {}
+        },
+        result: 'This is a plain string.'
+    },
+    {
+        name: 'should resolve multiple functions in a single string.',
+        test: {
+            input: 'This is a {{GENDER|man|woman}} and there are {{PLURAL|one|many}}.',
+            params: { m: false, plural: true }
+        },
+        result: 'This is a woman and there are many.'
+    },
+    {
+        name: 'should resolve functions with no parameters',
+        test: {
+            input: 'This is a {{GENDER|man|woman}}.',
+            params: {}
+        },
+        result: 'This is a woman.' // Default to 'f' if 'm' is not true
+    }
+]
+
 describe('FuncyStr process', () => {
     const fstr = new FuncyStr({
         GENDER: (params, m, f) => (params.m ? m : f),
         PLURAL: (params, one, plural) => (params.plural ? plural : one),
+        CHAR_NAME: (params) => params.char_name,
     })
 
-    
-    it('should resolve a simple GENDER function', () => {
-        expect(
-            fstr.process(
-                "This is a {{GENDER|man|woman}}.",
-                { m: true }
-            )
-        ).to.equal("This is a man.");
+    // Loop through the test cases and run each one
+    cases.forEach(({ name, test, result }) => {
+        it(name, () => {
+            const { input, params } = test;
+            expect(fstr.process(input, params)).to.equal(result);
+        });
     });
 
-    it('should resolve a simple PLURAL function', () => {
-        expect(
-            fstr.process(
-                "There is one {{PLURAL|apple|apples}}.",
-                { plural: true }
-            )
-        ).to.equal("There is one apples.");
-    });
-
-    it('should resolve nested functions', () => {
-        expect(
-            fstr.process(
-                "This is a {{GENDER|{{PLURAL|man|men}}|{{PLURAL|woman|women}}}}.",
-                { m: true, plural: true }
-            )
-        ).to.equal("This is a men.");
-    });
-
-    it('should handle missing function definitions gracefully', () => {
-        expect(
-            fstr.process(
-                "This is a {{UNKNOWN|arg1|arg2}}.",
-                {}
-            )
-        ).to.equal("This is a {{UNKNOWN|arg1|arg2}}.");
-    });
-
-    it('should resolve multiple functions in a single string', () => {
-        expect(
-            fstr.process(
-                "This is a {{GENDER|man|woman}} and there are {{PLURAL|one|many}}.",
-                { m: false, plural: true }
-            )
-        ).to.equal("This is a woman and there are many.");
-    });
-
-    it('should resolve functions with no parameters', () => {
-        expect(
-            fstr.process(
-                "This is a {{GENDER|man|woman}}.",
-                {}
-            )
-        ).to.equal("This is a woman."); // Default to 'f' if 'm' is not provided
-    });
-
+    // Special case for deeply nested functions
     it('should resolve deeply nested functions', () => {
         const input = "This is a {{PLURAL|{{GENDER|{{PLURAL|man|men}}|{{PLURAL|woman|women}}}}|people}}.";
         expect(
@@ -88,12 +118,4 @@ describe('FuncyStr process', () => {
         ).to.equal("This is a man.");
     });
 
-    it('should return the original string if no functions are present', () => {
-        expect(
-            fstr.process(
-                "This is a plain string.",
-                { m: true, plural: false }
-            )
-        ).to.equal("This is a plain string.");
-    });
 });
