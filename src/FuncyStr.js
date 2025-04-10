@@ -1,12 +1,35 @@
+/**
+ * FuncyStr - A utility class for processing strings with embedded function calls.
+ *
+ * Replaces patterns like {{functionName|arg1|arg2}} with the result of
+ * calling the specified function.
+ *
+ * @author Moriel Schottlender <mooeypoo@gmail.com>
+ * @license MIT
+ */
 class FuncyStr {
     #funcs = {}
     #regexlookup = /{{([^{}\v]+)}}/;
 
+    /**
+     * Creates a new FuncyStr instance.
+     *
+     * @param {Object} funcs - An object mapping function names to their implementations.
+     * @param {Object} config - Configuration options.
+     * @param {RegExp} [config.regexlookup] - Custom regex pattern for matching function calls.
+     */
     constructor(funcs = {}, config = {}) {
         this.setFuncs(funcs)
         this.#regexlookup = config.regexlookup || this.#regexlookup
     }
 
+    /**
+     * Adds a single function to the function registry.
+     *
+     * @param {string} name - The name of the function to add.
+     * @param {Function} func - The function implementation to add.
+     * @throws {Error} If func is not a function.
+     */
     addFunc(name, func) {
         if (typeof func !== 'function') {
             throw new Error('func must be a function')
@@ -14,6 +37,12 @@ class FuncyStr {
         this.#funcs[name] = func
     }
 
+    /**
+     * Sets multiple functions in the function registry.
+     *
+     * @param {Object} funcs - An object mapping function names to their implementations.
+     * @throws {Error} If funcs is not an object.
+     */
     setFuncs(funcs) {
         if (typeof funcs !== 'object') {
             throw new Error('funcs must be an object')
@@ -25,16 +54,39 @@ class FuncyStr {
         }
     }
 
+    /**
+     * Retrieves a function from the registry by name.
+     *
+     * @param {string} name - The name of the function to retrieve.
+     * @returns {Function|undefined} The function implementation or undefined if not found.
+     */
     getFunc(name) {
         return this.#funcs[name]
     }
 
+    /**
+     * Executes a registered function with the given arguments.
+     *
+     * @private
+     * @param {string} name - The name of the function to run.
+     * @param {Array} args - Arguments to pass to the function.
+     * @param {*} params - Context object passed as the first parameter to the function.
+     * @returns {*} The result of the function call.
+     */
     #runFunc(name, args, params) {
         if (typeof this.getFunc(name) === 'function') {
             return this.#funcs[name](params, ...args)
         }
     }
 
+    /**
+     * Evaluates a function call embedded in a string.
+     *
+     * @private
+     * @param {string} str - The string containing the function call.
+     * @param {*} params - Context object passed to the function.
+     * @returns {string} The result of the function call or a placeholder if the function doesn't exist.
+     */
     #evaluateFunction(str, params) {
         const innerMatch = str.match(this.#regexlookup);
         if (!innerMatch) return str;
@@ -64,6 +116,14 @@ class FuncyStr {
             .replace('}}', '%%close%%brack%%');
     }
 
+    /**
+     * Processes a string by evaluating all function calls within it.
+     * Recursively processes nested function calls.
+     *
+     * @param {string} str - The string to process.
+     * @param {*} params - Context object passed to all functions.
+     * @returns {string} The processed string with all function calls evaluated.
+     */
     process(str, params) {
         // Replace all functions in the string recursively
         while (str.match(this.#regexlookup)) {
