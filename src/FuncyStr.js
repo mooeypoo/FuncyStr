@@ -111,9 +111,21 @@ class FuncyStr {
         // we will replace those symbols with the original {{ }}.
         // This way, we can break the loop and return the original
         // matches when the function isn't recognized.
-        return innerMatch[0] // <-- innerMatch[0] is the entire match including {{ and }}
-            .replace('{{', '%%open%%brack%%')
-            .replace('}}', '%%close%%brack%%');
+        return this.#replaceSingleBrackets(innerMatch[0]) // <-- innerMatch[0] is the entire match including {{ and }}
+    }
+
+    #replaceSingleBrackets(str) {
+        // Replace single brackets with a placeholder
+        return str
+            .replace('{', '%%open%%brack%%')
+            .replace('}', '%%close%%brack%%');
+    }
+
+    #restoreSingleBrackets(str) {
+        // Restore single brackets from the placeholder
+        return str
+            .replace('%%open%%brack%%', '{')
+            .replace('%%close%%brack%%', '}');
     }
 
     /**
@@ -125,16 +137,20 @@ class FuncyStr {
      * @returns {string} The processed string with all function calls evaluated.
      */
     process(str, params) {
+        // Prepare the string by replacing single brackets
+        // that are not part of a pair
+        str = str
+            .replace(/(?:[^{])({)(?:[^{])/g, this.#replaceSingleBrackets)
+            .replace(/(?:[^}])(})(?:[^}])/g, this.#replaceSingleBrackets);
+
         // Replace all functions in the string recursively
         while (str.match(this.#regexlookup)) {
             str = str.replace(this.#regexlookup, this.#evaluateFunction.apply(this, [str, params]));
         }
     
         // Replace the temporary markers with the original {{ }} and return
-        return str
-            .replace(/%%open%%brack%%/g, '{{')
-            .replace(/%%close%%brack%%/g, '}}');
-    }
+        return this.#restoreSingleBrackets(str)
+}
 }
 
 export default FuncyStr

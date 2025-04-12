@@ -99,6 +99,22 @@ const cases = [
             params: { m: true, plural: true }
         },
         result: 'This is a men.'
+    },
+    {
+        name: 'should ignore single brackets',
+        test: {
+            input: 'This is a {GENDER|man|woman}.',
+            params: { m: true }
+        },
+        result: 'This is a {GENDER|man|woman}.'
+    },
+    {
+        name: 'should ignore single brackets in parameters',
+        test: {
+            input: 'This is a {{GENDER|man{he}|woman{she}}}.',
+            params: { m: false }
+        },
+        result: 'This is a woman{she}.'
     }
 ]
 
