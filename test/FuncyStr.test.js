@@ -75,6 +75,30 @@ const cases = [
             params: {}
         },
         result: 'This is a woman.' // Default to 'f' if 'm' is not true
+    },
+    {
+        name: 'should resolve function that outputs unbalanced brackets',
+        test: {
+            input: 'This is a {{BRACKOUTPUT}}string.',
+            params: {}
+        },
+        result: 'This is a {{string.'
+    },
+    {
+        name: 'should resolve function that outputs unbalanced brackets',
+        test: {
+            input: 'This is a {{BRACKOUTPUTEND}}string.',
+            params: {}
+        },
+        result: 'This is a }}string.'
+    },
+    {
+        name: 'should resolve functions that output another function',
+        test: {
+            input: 'This is a {{OUTPUTFUNC}}.',
+            params: { m: true, plural: true }
+        },
+        result: 'This is a men.'
     }
 ]
 
@@ -83,6 +107,11 @@ describe('FuncyStr process', () => {
         GENDER: (params, m, f) => (params.m ? m : f),
         PLURAL: (params, one, plural) => (params.plural ? plural : one),
         CHAR_NAME: (params) => params.char_name,
+        BRACKOUTPUT: (params) => '{{',
+        BRACKOUTPUTEND: (params) => '}}',
+        OUTPUTFUNC: (params) => {
+            return params.m ? '{{PLURAL|man|men}}' : '{{PLURAL|woman|women}}';
+        }
     })
 
     // Loop through the test cases and run each one
