@@ -115,6 +115,22 @@ const cases = [
             params: { m: false }
         },
         result: 'This is a woman{she}.'
+    },
+    {
+        name: 'should resolve function that outputs unbalanced brackets within other functions',
+        test: {
+            input: 'This is a {{PLURAL|{{BRACKOUTPUTEND}}|many}} string.',
+            params: { plural: true }
+        },
+        result: 'This is a many string.'
+    },
+    {
+        name: 'should resolve function that outputs unbalanced brackets within other functions, and keep the unbalanced brackets',
+        test: {
+            input: 'This is a {{PLURAL|{{BRACKOUTPUTEND}}|many}} string.',
+            params: { plural: false }
+        },
+        result: 'This is a }} string.'
     }
 ]
 

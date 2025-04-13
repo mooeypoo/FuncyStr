@@ -100,7 +100,16 @@ class FuncyStr {
 
         // Call the corresponding function from the function map
         if (this.#funcs[funcName]) {
-            return this.#runFunc.call(this, funcName, args, params)
+            const funcResult = this.#runFunc.call(this, funcName, args, params)
+
+            // If the internal result of the function passes the regex
+            // lookup, we want to keep it so it can then be processed.
+            if (funcResult.match(this.#regexlookup)) {
+                return funcResult;
+            }
+            // ...But if it doesn't, we need to replace { and } with placeholders
+            // so we avoid having unbalanced brackets in the string.
+            return this.#replaceSingleBrackets(funcResult)
         }
 
         // If function isn't found, we want to return the original
@@ -117,15 +126,15 @@ class FuncyStr {
     #replaceSingleBrackets(str) {
         // Replace single brackets with a placeholder
         return str
-            .replace('{', '%%open%%brack%%')
-            .replace('}', '%%close%%brack%%');
+            .replaceAll('{', '%%open%%brack%%')
+            .replaceAll('}', '%%close%%brack%%');
     }
 
     #restoreSingleBrackets(str) {
         // Restore single brackets from the placeholder
         return str
-            .replace('%%open%%brack%%', '{')
-            .replace('%%close%%brack%%', '}');
+            .replaceAll('%%open%%brack%%', '{')
+            .replaceAll('%%close%%brack%%', '}');
     }
 
     /**
@@ -140,8 +149,8 @@ class FuncyStr {
         // Prepare the string by replacing single brackets
         // that are not part of a pair
         str = str
-            .replace(/(?:[^{])({)(?:[^{])/g, this.#replaceSingleBrackets)
-            .replace(/(?:[^}])(})(?:[^}])/g, this.#replaceSingleBrackets);
+            .replaceAll(/(?:[^{])({)(?:[^{])/g, this.#replaceSingleBrackets)
+            .replaceAll(/(?:[^}])(})(?:[^}])/g, this.#replaceSingleBrackets);
 
         // Replace all functions in the string recursively
         while (str.match(this.#regexlookup)) {
