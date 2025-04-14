@@ -2,6 +2,7 @@
   "name": "funcystr-demo",
   "version": "1.0.0",
   "description": "Demo application for FuncyStr library",
+  "author": "Moriel Schottlender <mooeypoo@gmail.com>",
   "scripts": {
     "start": "vite",
     "build": "vite build",
