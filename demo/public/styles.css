@@ -1,0 +1,79 @@
+/* Custom styles for the demo */
+code {
+    background-color: #f3f4f6;
+    padding: 0.2em 0.4em;
+    border-radius: 0.25rem;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+textarea {
+    font-family: monospace;
+    resize: vertical;
+}
+
+#result {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Smooth transitions */
+textarea, #result {
+    transition: all 0.3s ease;
+}
+
+/* Focus states */
+textarea:focus, button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+/* Function code display */
+#function-code {
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', monospace;
+    line-height: 1.5;
+    tab-size: 4;
+}
+
+#function-code .comment {
+    color: #6a9955;
+}
+
+#function-code .keyword {
+    color: #569cd6;
+}
+
+#function-code .string {
+    color: #ce9178;
+}
+
+#function-code .number {
+    color: #b5cea8;
+}
+
+#function-code .function {
+    color: #dcdcaa;
+}
+
+/* Collapsible section */
+#function-code-container {
+    transition: all 0.3s ease;
+    max-height: 0;
+    overflow: hidden;
+}
+
+#function-code-container:not(.hidden) {
+    max-height: 1000px;
+}
+
+#toggle-code {
+    transition: all 0.2s ease;
+}
+
+#toggle-code:hover {
+    transform: translateY(-1px);
+} 

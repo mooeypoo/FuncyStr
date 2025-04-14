@@ -1,0 +1,16 @@
+{
+  "name": "funcystr-demo",
+  "version": "1.0.0",
+  "description": "Demo application for FuncyStr library",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "funcystr": "file:.."
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+} 
