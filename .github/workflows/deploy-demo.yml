@@ -26,7 +26,15 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: Build library
+        run: |
+          npm install
+          npm run prepare-demo-files
+#          npm run build
+#          mkdir -p demo/public/lib
+#          cp -r dist/* demo/public/lib/
+
+      - name: Install demo dependencies
         run: |
           cd demo
           npm install

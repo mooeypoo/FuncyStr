@@ -13,7 +13,8 @@
   "scripts": {
     "build": "microbundle",
     "dev": "microbundle watch",
-    "test": "mocha --require @babel/register --reporter mocha-multi-reporters --reporter-options configFile=config.json"
+    "test": "mocha --require @babel/register --reporter mocha-multi-reporters --reporter-options configFile=config.json",
+    "prepare-demo-files": "npm run build && mkdir -p demo/public/lib && cp -r dist/* demo/public/lib/"
   },
   "author": "Moriel Schottlender <mooeypoo@gmail.com>",
   "license": "MIT",

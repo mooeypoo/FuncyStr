@@ -1,4 +1,4 @@
-import FuncyStr from '../../src/FuncyStr.js';
+import FuncyStr from './lib/funcystr.module.js';
 
 // Define the functions that will be available in the demo
 const demoFunctions = {
