@@ -6,7 +6,10 @@ const demoFunctions = {
     lowercase: (params, text) => text.toLowerCase(),
     reverse: (params, text) => text.split('').reverse().join(''),
     repeat: (params, text, times = 2) => text.repeat(parseInt(times)),
-    length: (params, text) => text.length.toString()
+    length: (params, text) => text.length.toString(),
+    gender: (params, he, she, they) => {
+        return params.gender === 'he' ? he : params.gender === 'she' ? she : they;
+    }
 };
 
 // Initialize FuncyStr with our demo functions
@@ -20,6 +23,7 @@ const functionCodeDiv = document.getElementById('function-code');
 const toggleBtn = document.getElementById('toggle-code');
 const toggleText = toggleBtn.querySelector('.toggle-text');
 const functionCodeContainer = document.getElementById('function-code-container');
+const pronounSet = document.getElementById('pronoun-set');
 
 // Function to display the function code
 function displayFunctionCode() {
@@ -44,21 +48,35 @@ function toggleCodeDisplay() {
 // Add event listener to the toggle button
 toggleBtn.addEventListener('click', toggleCodeDisplay);
 
+// Function to process text when pronoun set changes
+function updateResult() {
+    const input = inputText.value;
+    try {
+        const processed = funcyStr.process(input, { gender: pronounSet.value });
+        resultDiv.innerHTML = `<p class="text-gray-800">${processed}</p>`;
+    } catch (error) {
+        resultDiv.innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
+    }
+}
+
+// Add event listener to the pronoun selector
+pronounSet.addEventListener('change', updateResult);
+
 // Add event listener to the process button
 processBtn.addEventListener('click', () => {
     const input = inputText.value;
     try {
-        const processed = funcyStr.process(input);
+        const processed = funcyStr.process(input, { gender: pronounSet.value });
         resultDiv.innerHTML = `<p class="text-gray-800">${processed}</p>`;
     } catch (error) {
         resultDiv.innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
     }
 });
 
-// Add some example text to the input
+// Update the example text to include pronouns
 inputText.value = `Hello {{uppercase|world}}!
-The length is {{length|Hello world}}. We can also try {{uppercase|{{reverse|detsen}} functions}}. 
-This is {{repeat|so |5}} cool!`;
+The length is {{length|Hello world}}. We can also try {{uppercase|{{reverse|detsen}} functions}}. This is {{repeat|so |5}} cool!
+{{gender|He|She|They}} went to the store and bought {{gender|himself|herself|themselves}} groceries and carried them home.`;
 
 // Display the function code
 displayFunctionCode();
