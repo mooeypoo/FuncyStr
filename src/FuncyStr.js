@@ -34,7 +34,7 @@ class FuncyStr {
         if (typeof func !== 'function') {
             throw new Error('func must be a function')
         }
-        this.#funcs[name] = func
+        this.#funcs[name.toLowerCase()] = func
     }
 
     /**
@@ -60,8 +60,8 @@ class FuncyStr {
      * @param {string} name - The name of the function to retrieve.
      * @returns {Function|undefined} The function implementation or undefined if not found.
      */
-    getFunc(name) {
-        return this.#funcs[name]
+    getFunc(name, args, params) {
+        return this.#funcs[name.toLowerCase()]
     }
 
     /**
@@ -74,8 +74,9 @@ class FuncyStr {
      * @returns {*} The result of the function call.
      */
     #runFunc(name, args, params) {
+        name = name.toLowerCase()
         if (typeof this.getFunc(name) === 'function') {
-            return this.#funcs[name](params, ...args)
+            return this.getFunc(name)(params, ...args)
         }
     }
 
@@ -99,17 +100,17 @@ class FuncyStr {
         const [funcName, ...args] = funcString.split('|');
 
         // Call the corresponding function from the function map
-        if (this.#funcs[funcName]) {
+        if (this.#funcs[funcName.toLowerCase()]) {
             const funcResult = this.#runFunc.call(this, funcName, args, params)
 
             // If the internal result of the function passes the regex
             // lookup, we want to keep it so it can then be processed.
-            if (funcResult.match(this.#regexlookup)) {
+            if (funcResult && funcResult.match(this.#regexlookup)) {
                 return funcResult;
             }
             // ...But if it doesn't, we need to replace { and } with placeholders
             // so we avoid having unbalanced brackets in the string.
-            return this.#replaceSingleBrackets(funcResult)
+            return this.#replaceWithPlaceholders(funcResult)
         }
 
         // If function isn't found, we want to return the original
@@ -120,21 +121,32 @@ class FuncyStr {
         // we will replace those symbols with the original {{ }}.
         // This way, we can break the loop and return the original
         // matches when the function isn't recognized.
-        return this.#replaceSingleBrackets(innerMatch[0]) // <-- innerMatch[0] is the entire match including {{ and }}
+        return this.#replaceWithPlaceholders(innerMatch[0]) // <-- innerMatch[0] is the entire match including {{ and }}
+    }
+
+    #replaceWithPlaceholders(str, replacePipes = true) {
+        if (!str) return
+        // Replace single brackets and pipes with a placeholder
+        return str
+            .replaceAll('{', '%%open%%brack%%')
+            .replaceAll('}', '%%close%%brack%%')
+            .replaceAll('|', '%%pipe%%');
     }
 
     #replaceSingleBrackets(str) {
-        // Replace single brackets with a placeholder
+        if (!str) return
+        // Replace single brackets only with a placeholder
         return str
             .replaceAll('{', '%%open%%brack%%')
-            .replaceAll('}', '%%close%%brack%%');
+            .replaceAll('}', '%%close%%brack%%')
     }
 
-    #restoreSingleBrackets(str) {
-        // Restore single brackets from the placeholder
+    #restorePlaceholders(str) {
+        // Restore single brackets from the placeholder regardless of case
         return str
-            .replaceAll('%%open%%brack%%', '{')
-            .replaceAll('%%close%%brack%%', '}');
+            .replace(/%%open%%brack%%/ig, '{')
+            .replaceAll(/%%close%%brack%%/ig, '}')
+            .replaceAll(/%%pipe%%/ig, '|')
     }
 
     /**
@@ -156,10 +168,10 @@ class FuncyStr {
         while (str.match(this.#regexlookup)) {
             str = str.replace(this.#regexlookup, this.#evaluateFunction.apply(this, [str, params]));
         }
-    
+
         // Replace the temporary markers with the original {{ }} and return
-        return this.#restoreSingleBrackets(str)
-}
+        return this.#restorePlaceholders(str)
+    }
 }
 
 export default FuncyStr

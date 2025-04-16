@@ -45,6 +45,14 @@ const cases = [
         result: 'This is a {{UNKNOWN|arg1|arg2}}.'
     },
     {
+        name: 'should handle missing function definitions gracefully',
+        test: {
+            input: 'This is a nested {{PLURAL|{{UNKNOWN|arg1|arg2}}|plural}}.',
+            params: { plural: false }
+        },
+        result: 'This is a nested {{UNKNOWN|arg1|arg2}}.'
+    },
+    {
         name: 'should handle empty strings',
         test: {
             input: '',
@@ -178,5 +186,38 @@ describe('FuncyStr process', () => {
             )
         ).to.equal("This is a man.");
     });
+});
 
+
+describe('FuncyStr process demo string', () => {
+    it('should resolve the demo string', () => {
+        const str = `Hello, {{uppercase|world}}!
+            The length is {{length|Hello world}}. We can also try {{uppercase|{{reverse|detsen}} functions}}.
+            This is {{UPPERCASE|{{NOTRECOGNIZED|one|two}}}}
+            This is {{repeat|so |5}}cool!
+            {{gender|He|She|They}} went to the store and bought {{gender|himself|herself|themselves}} groceries and carried them home.`;
+        const fstr = new FuncyStr({
+            GENDER: (params, he, she, they) => params.gender === 'he' ? he : params.gender === 'she' ? she : they,
+            UPPERCASE: (params, text) => text.toUpperCase(),
+            LENGTH: (params, text) => text.length.toString(),
+            REVERSE: (params, text) => text.split('').reverse().join(''),
+            REPEAT: (params, text, times) => text.repeat(parseInt(times)),
+        });
+
+        expect(fstr.process(str, { gender: 'they' })).to.equal(
+            `Hello, WORLD!
+            The length is 11. We can also try NESTED FUNCTIONS.
+            This is {{NOTRECOGNIZED|ONE|TWO}}
+            This is so so so so so cool!
+            They went to the store and bought themselves groceries and carried them home.`
+        );
+
+        expect(fstr.process(str, { gender: 'she' })).to.equal(
+            `Hello, WORLD!
+            The length is 11. We can also try NESTED FUNCTIONS.
+            This is {{NOTRECOGNIZED|ONE|TWO}}
+            This is so so so so so cool!
+            She went to the store and bought herself groceries and carried them home.`
+        );
+    });
 });
