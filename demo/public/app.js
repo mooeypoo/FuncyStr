@@ -1,10 +1,8 @@
 import FuncyStr from './lib/funcystr.module.js';
 
 // Define the functions that will be available in the demo
-const demoFunctions = {
+const demoFuncs = {
     uppercase: (params, text) => text.toUpperCase(),
-    lowercase: (params, text) => text.toLowerCase(),
-    reverse: (params, text) => text.split('').reverse().join(''),
     repeat: (params, text, times = 2) => text.repeat(parseInt(times)),
     length: (params, text) => text.length.toString(),
     gender: (params, he, she, they) => {
@@ -13,7 +11,7 @@ const demoFunctions = {
 };
 
 // Initialize FuncyStr with our demo functions
-const funcyStr = new FuncyStr(demoFunctions);
+const funcyStr = new FuncyStr(demoFuncs);
 
 // Get DOM elements
 const inputText = document.getElementById('input-text');
@@ -27,7 +25,7 @@ const pronounSet = document.getElementById('pronoun-set');
 
 // Function to display the function code
 function displayFunctionCode() {
-    const code = Object.entries(demoFunctions)
+    const code = Object.entries(demoFuncs)
         .map(([name, func]) => {
             const funcStr = func.toString();
             return `// ${name} function
@@ -75,7 +73,11 @@ processBtn.addEventListener('click', () => {
 
 // Update the example text to include pronouns
 inputText.value = `Hello {{uppercase|world}}!
-The length is {{length|Hello world}}. We can also try {{uppercase|{{reverse|detsen}} functions}}. This is {{repeat|so |5}} cool!
+The length of "Hello World" is {{length|Hello world}}. 
+We can also try {{uppercase|{{repeat|nested| 2}} functions}}!
+
+And here is a sentence using pronouns with gendered language:
+
 {{gender|He|She|They}} went to the store and bought {{gender|himself|herself|themselves}} groceries and carried them home.`;
 
 // Display the function code
