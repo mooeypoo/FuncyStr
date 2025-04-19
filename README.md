@@ -1,8 +1,7 @@
 # FuncyStr Library
-![Node.js CI](https://github.com/mooeypoo/FuncyStr/actions/workflows/test.yaml/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/mooeypoo)
+![Node.js CI](https://github.com/mooeypoo/FuncyStr/actions/workflows/test.yaml/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-
-
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/mooeypoo)
 
 FuncyStr is a lightweight JavaScript library designed to process strings with embedded functions. It allows dynamic string resolution based on provided parameters, supporting nested and multiple function calls within a single string.
 
@@ -18,7 +17,7 @@ FuncyStr is a lightweight JavaScript library designed to process strings with em
 Install FuncyStr via npm:
 
 ```bash
-npm install funcystr
+npm install funcystr --save-dev
 ```
 
 ## Usage
@@ -29,7 +28,7 @@ npm install funcystr
 import FuncyStr from 'funcystr';
 
 const fstr = new FuncyStr({
-    GENDER: (params, m, f) => (params.m ? m : f),
+    GENDER: (params, he, she, they) => params.gender === 'he' ? he : params.gender === 'she' ? she : they;
     PLURAL: (params, one, plural) => (params.plural ? plural : one),
 });
 
@@ -40,9 +39,9 @@ console.log(result); // Output: "This is a man."
 ### Nested Functions
 
 ```javascript
-const input = "This is a {{GENDER|{{PLURAL|man|men}}|{{PLURAL|woman|women}}}}.";
+const input = "{{PLURAL|This is|These are}} lovely {{GENDER|{{PLURAL|man|men}}|{{PLURAL|woman|women}}}}.";
 const result = fstr.process(input, { m: true, plural: true });
-console.log(result); // Output: "This is a men."
+console.log(result); // Output: "These are lovely men."
 ```
 
 ### Handling Missing Functions
@@ -77,4 +76,4 @@ npm run test
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License by Moriel Schottlender. Credit is appreciated.
