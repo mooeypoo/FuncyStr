@@ -1,5 +1,6 @@
 {
   "name": "funcystr-demo",
+  "private": true,
   "version": "1.0.0",
   "description": "Demo application for FuncyStr library",
   "author": "Moriel Schottlender <mooeypoo@gmail.com>",
