@@ -1,7 +1,10 @@
 {
   "name": "funcystr",
   "version": "1.0.0",
+  "author": "Moriel Schottlender <mooeypoo@gmail.com>",
+  "description": "A library that allows the creation and execution of functions within strings.",
   "type": "module",
+  "license": "MIT",
   "source": "src/FuncyStr.js",
   "exports": {
     "require": "./dist/funcystr.cjs",
@@ -16,9 +19,6 @@
     "test": "mocha --require @babel/register --reporter mocha-multi-reporters --reporter-options configFile=config.json",
     "prepare-demo-files": "npm run build && mkdir -p demo/public/lib && cp -r dist/* demo/public/lib/"
   },
-  "author": "Moriel Schottlender <mooeypoo@gmail.com>",
-  "license": "MIT",
-  "description": "A library that allows the creation and execution of functions within strings.",
   "devDependencies": {
     "@babel/cli": "^7.27.0",
     "@babel/core": "^7.26.10",
