@@ -13,10 +13,13 @@
         
         <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
             <div class="mb-6">
-                <h2 class="text-xl font-semibold mb-2 text-gray-700">Input</h2>
-                <textarea id="input-text" class="w-full h-40 p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your text with function calls here..."></textarea>
+                <h2 class="text-xl font-semibold mb-2 text-gray-700">The FuncyStr Library</h2>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <p class="text-gray-600">
+                        FuncyStr is a lightweight JavaScript library designed to process strings with embedded functions. It allows dynamic string resolution based on provided parameters, supporting nested and multiple function calls within a single string.
+                    </p>
+                </div>
             </div>
-
             <div class="mb-6">
                 <h2 class="text-xl font-semibold mb-2 text-gray-700">Available Functions</h2>
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -24,7 +27,7 @@
                         <li><code>uppercase</code> - Converts text to uppercase</li>
                         <li><code>repeat</code> - Repeats text N times</li>
                         <li><code>length</code> - Returns the length of the text</li>
-                        <li><code>gender</code> - Returns the appropriate value of gendered language according to chosen pronoun parameter</li>
+                        <li><code>pronoun</code> - Returns the appropriate value of gendered language according to chosen pronoun parameter</li>
                     </ul>
                 </div>
             </div>
@@ -38,16 +41,28 @@
                 </div>
                 <div id="function-code-container" class="hidden">
                     <div class="bg-gray-50 p-4 rounded-lg">
-                        <pre id="function-code" class="text-sm overflow-x-auto"></pre>
+                        <pre id="function-code" class="text-sm overflow-x-auto">
+// {{uppercase|text}}: 
+(params, text) => text.toUpperCase()
+
+// {{repeat|text|times}}: 
+(params, text, times = 2) => text.repeat(parseInt(times))
+
+// {{length|text}}: 
+(params, text) => text.length.toString()
+
+// {{pronoun|he|she|they}}: 
+(params, he, she, they) => {
+    return params.pronoun === 'he' ? he : params.pronoun === 'she' ? she : they;
+}
+                        </pre>
                     </div>
                 </div>
             </div>
 
             <div class="mb-6">
-                <h2 class="text-xl font-semibold mb-2 text-gray-700">Example</h2>
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <p class="text-gray-600">Try: <code>Hello {{uppercase|world}}! The length is {{length|Hello world}}.</code></p>
-                </div>
+                <h2 class="text-xl font-semibold mb-2 text-gray-700">Input</h2>
+                <textarea id="input-text" class="w-full h-40 p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your text with function calls here..."></textarea>
             </div>
 
             <button id="process-btn" class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">

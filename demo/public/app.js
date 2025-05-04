@@ -17,24 +17,24 @@ const funcyStr = new FuncyStr(demoFuncs);
 const inputText = document.getElementById('input-text');
 const processBtn = document.getElementById('process-btn');
 const resultDiv = document.getElementById('result');
-const functionCodeDiv = document.getElementById('function-code');
+// const functionCodeDiv = document.getElementById('function-code');
 const toggleBtn = document.getElementById('toggle-code');
 const toggleText = toggleBtn.querySelector('.toggle-text');
 const functionCodeContainer = document.getElementById('function-code-container');
 const pronounSet = document.getElementById('pronoun-set');
 
 // Function to display the function code
-function displayFunctionCode() {
-    const code = Object.entries(demoFuncs)
-        .map(([name, func]) => {
-            const funcStr = func.toString();
-            return `// ${name} function
-${funcStr}`;
-        })
-        .join('\n\n');
+// function displayFunctionCode() {
+//     const code = Object.entries(demoFuncs)
+//         .map(([name, func]) => {
+//             const funcStr = func.toString();
+//             return `// ${name} function
+// ${funcStr}`;
+//         })
+//         .join('\n\n');
     
-    functionCodeDiv.textContent = code;
-}
+//     functionCodeDiv.textContent = code;
+// }
 
 // Function to toggle the code display
 function toggleCodeDisplay() {
@@ -81,4 +81,4 @@ And here is a sentence using pronouns with gendered language:
 {{gender|He|She|They}} went to the store and bought {{gender|himself|herself|themselves}} groceries and carried them home.`;
 
 // Display the function code
-displayFunctionCode();
+// displayFunctionCode();
