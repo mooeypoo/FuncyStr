@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mooeypoo/FuncyStr.git"
+    "url": "https://github.com/mooeypoo/FuncyStr"
   },
   "source": "src/FuncyStr.js",
   "exports": {
