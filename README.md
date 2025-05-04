@@ -28,20 +28,20 @@ npm install funcystr --save-dev
 import FuncyStr from 'funcystr';
 
 const fstr = new FuncyStr({
-    GENDER: (params, he, she, they) => params.gender === 'he' ? he : params.gender === 'she' ? she : they;
+    PRONOUN: (params, he, she, they) => params.pronoun === 'he' ? he : params.pronoun === 'she' ? she : they;
     PLURAL: (params, one, plural) => (params.plural ? plural : one),
 });
 
-const result = fstr.process("This is a {{GENDER|man|woman}}.", { m: true });
-console.log(result); // Output: "This is a man."
+const result = fstr.process("{{He is|She is|They are}} very welcome to join us.", { pronoun: 'he' });
+console.log(result); // Output: "He is very welcome to join us."
 ```
 
 ### Nested Functions
 
 ```javascript
-const input = "{{PLURAL|This is|These are}} lovely {{GENDER|{{PLURAL|man|men}}|{{PLURAL|woman|women}}}}.";
-const result = fstr.process(input, { m: true, plural: true });
-console.log(result); // Output: "These are lovely men."
+const input = "{{PLURAL|This is|These are}} lovely {{PRONOUN|{{PLURAL|man|men}}|{{PLURAL|woman|women}}|{{PLURAL|person|people}}}}.";
+const result = fstr.process(input, { pronoun: 'they', plural: true });
+console.log(result); // Output: "These are lovely people."
 ```
 
 ### Handling Missing Functions
@@ -77,3 +77,5 @@ npm run test
 ## License
 
 This project is licensed under the MIT License by Moriel Schottlender. Credit is appreciated.
+
+If you want to support this project, please feel free to submit pull requests, add issues, or support me by [buying me coffee](https://buymeacoffee.com/mooeypoo).

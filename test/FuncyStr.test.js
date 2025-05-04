@@ -5,12 +5,12 @@ import { expect } from 'chai';
 
 const cases = [
     {
-        name: 'should resolve a simple GENDER function',
+        name: 'should resolve a simple PRONOUN function',
         test: {
-            input: 'This is a {{GENDER|man|woman}}.',
-            params: { m: true }
+            input: 'This is a {{PRONOUN|he|she|they}}.',
+            params: { pronoun: 'he' }
         },
-        result: "This is a man."
+        result: "This is a he."
     },
     {
         name: 'should resolve a simple PLURAL function',
@@ -31,8 +31,8 @@ const cases = [
     {
         name: 'should resolve multiple and nested functions',
         test: {
-            input: 'We see that {{PLURAL|this is|these are}} {{GENDER|{{PLURAL|a man|men}}|{{PLURAL|a woman|women}}}}.',
-            params: { m: true, plural: true }
+            input: 'We see that {{PLURAL|this is|these are}} {{PRONOUN|{{PLURAL|a man|men}}|{{PLURAL|a woman|women}}}}.',
+            params: { pronoun: 'he', plural: true }
         },
         result: 'We see that these are men.'
     },
@@ -71,18 +71,18 @@ const cases = [
     {
         name: 'should resolve multiple functions in a single string.',
         test: {
-            input: 'This is a {{GENDER|man|woman}} and there are {{PLURAL|one|many}}.',
-            params: { m: false, plural: true }
+            input: '{{CHAR_NAME}} said {{PRONOUN|he wants|she wants|they want}} to go.',
+            params: { pronoun: 'she', char_name: 'Alex' }
         },
-        result: 'This is a woman and there are many.'
+        result: 'Alex said she wants to go.'
     },
     {
         name: 'should resolve functions with no parameters',
         test: {
-            input: 'This is a {{GENDER|man|woman}}.',
+            input: '{{PRONOUN|He|She|They}} greeted us.',
             params: {}
         },
-        result: 'This is a woman.' // Default to 'f' if 'm' is not true
+        result: 'They greeted us.' // Default to 'they' by default
     },
     {
         name: 'should resolve function that outputs unbalanced brackets',
@@ -111,16 +111,16 @@ const cases = [
     {
         name: 'should ignore single brackets',
         test: {
-            input: 'This is a {GENDER|man|woman}.',
+            input: 'This is a {PRONOUN|man|woman}.',
             params: { m: true }
         },
-        result: 'This is a {GENDER|man|woman}.'
+        result: 'This is a {PRONOUN|man|woman}.'
     },
     {
         name: 'should ignore single brackets in parameters',
         test: {
-            input: 'This is a {{GENDER|man{he}|woman{she}}}.',
-            params: { m: false }
+            input: 'This is a {{PRONOUN|man{he}|woman{she}}}.',
+            params: { pronoun: 'she' }
         },
         result: 'This is a woman{she}.'
     },
@@ -144,7 +144,7 @@ const cases = [
 
 describe('FuncyStr process', () => {
     const fstr = new FuncyStr({
-        GENDER: (params, m, f) => (params.m ? m : f),
+        PRONOUN: (params, he, she, they) => params.pronoun === 'he' ? he : params.pronoun === 'she' ? she : they,
         PLURAL: (params, one, plural) => (params.plural ? plural : one),
         CHAR_NAME: (params) => params.char_name,
         BRACKOUTPUT: (params) => '{{',
@@ -164,25 +164,25 @@ describe('FuncyStr process', () => {
 
     // Special case for deeply nested functions
     it('should resolve deeply nested functions', () => {
-        const input = "This is a {{PLURAL|{{GENDER|{{PLURAL|man|men}}|{{PLURAL|woman|women}}}}|people}}.";
+        const input = "This is a {{PLURAL|{{PRONOUN|{{PLURAL|man|men}}|{{PLURAL|woman|women}}}}|people}}.";
         expect(
             fstr.process(
                 input,
-                { m: false, plural: false }
+                { pronoun: 'she', plural: false }
             )
         ).to.equal("This is a woman.");
 
         expect(
             fstr.process(
                 input,
-                { m: false, plural: true }
+                { pronoun: 'they', plural: true }
             )
         ).to.equal("This is a people.");
 
         expect(
             fstr.process(
                 input,
-                { m: true, plural: false }
+                { pronoun: 'he', plural: false }
             )
         ).to.equal("This is a man.");
     });
@@ -195,16 +195,16 @@ describe('FuncyStr process demo string', () => {
             The length is {{length|Hello world}}. We can also try {{uppercase|{{reverse|detsen}} functions}}.
             This is {{UPPERCASE|{{NOTRECOGNIZED|one|two}}}}
             This is {{repeat|so |5}}cool!
-            {{gender|He|She|They}} went to the store and bought {{gender|himself|herself|themselves}} groceries and carried them home.`;
+            {{pronoun|He|She|They}} went to the store and bought {{pronoun|himself|herself|themselves}} groceries and carried them home.`;
         const fstr = new FuncyStr({
-            GENDER: (params, he, she, they) => params.gender === 'he' ? he : params.gender === 'she' ? she : they,
+            PRONOUN: (params, he, she, they) => params.pronoun === 'he' ? he : params.pronoun === 'she' ? she : they,
             UPPERCASE: (params, text) => text.toUpperCase(),
             LENGTH: (params, text) => text.length.toString(),
             REVERSE: (params, text) => text.split('').reverse().join(''),
             REPEAT: (params, text, times) => text.repeat(parseInt(times)),
         });
 
-        expect(fstr.process(str, { gender: 'they' })).to.equal(
+        expect(fstr.process(str, { pronoun: 'they' })).to.equal(
             `Hello, WORLD!
             The length is 11. We can also try NESTED FUNCTIONS.
             This is {{NOTRECOGNIZED|ONE|TWO}}
@@ -212,7 +212,7 @@ describe('FuncyStr process demo string', () => {
             They went to the store and bought themselves groceries and carried them home.`
         );
 
-        expect(fstr.process(str, { gender: 'she' })).to.equal(
+        expect(fstr.process(str, { pronoun: 'she' })).to.equal(
             `Hello, WORLD!
             The length is 11. We can also try NESTED FUNCTIONS.
             This is {{NOTRECOGNIZED|ONE|TWO}}
