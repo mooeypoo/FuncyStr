@@ -5,6 +5,10 @@
   "description": "A library that allows the creation and execution of functions within strings.",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mooeypoo/FuncyStr.git"
+  },
   "source": "src/FuncyStr.js",
   "exports": {
     "require": "./dist/funcystr.cjs",
