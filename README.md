@@ -28,7 +28,7 @@ npm install funcystr --save-dev
 import FuncyStr from 'funcystr';
 
 const fstr = new FuncyStr({
-    PRONOUN: (params, he, she, they) => params.pronoun === 'he' ? he : params.pronoun === 'she' ? she : they;
+    PRONOUN: (params, he, she, they) => params.pronoun === 'he' ? he : params.pronoun === 'she' ? she : they,
     PLURAL: (params, one, plural) => (params.plural ? plural : one),
 });
 
