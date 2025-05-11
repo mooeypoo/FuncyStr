@@ -36,6 +36,7 @@
                         <li><code>repeat</code> - Repeats text N times</li>
                         <li><code>length</code> - Returns the length of the text</li>
                         <li><code>pronoun</code> - Returns the appropriate value of gendered language according to chosen pronoun parameter</li>
+                        <li><code>abbrev</code> - Returns an `&lt;abbr&gt;` abbreviation of the term with the description as the title</li>
                     </ul>
                 </div>
             </div>
@@ -50,18 +51,24 @@
                 <div id="function-code-container" class="hidden">
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <pre id="function-code" class="text-sm overflow-x-auto">
-// {{uppercase|text}}: 
-(params, text) => text.toUpperCase()
-
-// {{repeat|text|times}}: 
-(params, text, times = 2) => text.repeat(parseInt(times))
-
-// {{length|text}}: 
-(params, text) => text.length.toString()
-
-// {{pronoun|he|she|they}}: 
-(params, he, she, they) => {
-    return params.pronoun === 'he' ? he : params.pronoun === 'she' ? she : they;
+{
+    // {{uppercase|text}}: 
+    'uppercase': (params, text) => text.toUpperCase(),
+    // {{repeat|text|times}}: 
+    'repeat': (params, text, times = 2) => text.repeat(parseInt(times)),
+    // {{length|text}}: 
+    'length': (params, text) => text.length.toString(),
+    // {{pronoun|he|she|they}}: 
+    'pronoun': (params, he, she, they) => {
+        return params.pronoun === 'he' ? he : params.pronoun === 'she' ? she : they;
+    },
+    // {{abbrev|term|desc}}: 
+    'abbrev': (params, term, desc) => {
+        // Very basic sanitization of the term and desc, just for the demo
+        term = term.replace(/[^a-zA-Z0-9 -]/g, "");
+        desc = desc.replace(/[^a-zA-Z0-9 -]/g, "");
+        return `<abbr title="${desc}">${term}</abbr>`;
+    }
 }
                         </pre>
                     </div>

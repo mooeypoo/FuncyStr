@@ -7,6 +7,12 @@ const demoFuncs = {
     length: (params, text) => text.length.toString(),
     gender: (params, he, she, they) => {
         return params.gender === 'he' ? he : params.gender === 'she' ? she : they;
+    },
+    abbrev: (params, term, desc) => {
+        // Very basic sanitization of the term and desc
+        term = term.replace(/[^a-zA-Z0-9 -]/g, "");
+        desc = desc.replace(/[^a-zA-Z0-9 -]/g, "");
+        return `<abbr title="${desc}">${term}</abbr>`;
     }
 };
 
@@ -75,6 +81,8 @@ processBtn.addEventListener('click', () => {
 inputText.value = `Hello {{uppercase|world}}!
 The length of "Hello World" is {{length|Hello world}}. 
 We can also try {{uppercase|{{repeat|nested| 2}} functions}}!
+
+The function {{abbrev|HTML|HyperText Markup Language}} is a way to output formatted html.
 
 And here is a sentence using pronouns with gendered language:
 
