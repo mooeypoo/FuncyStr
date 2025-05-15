@@ -189,35 +189,52 @@ describe('FuncyStr process', () => {
 });
 
 describe('FuncyStr async functions', () => {
-    it('should resolve an async function', async () => {
-        const fstr = new FuncyStr({
-            FETCHREMOTE: async (params, articlename) => {
-                try {
-                    const response = await fetch(
-                        `https://en.wikipedia.org/w/rest.php/v1/search/page?q=${articlename}&limit=1`,
-                        {
-                            method: 'GET',
-                            headers: {
-                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                                'Content-Type': 'application/json'
-                            }
-                        }
-                    );
-                    if (!response.ok) {
-                        console.error(response);
-                        return '<NO RESULTS>';
+    const asyncFetchFromWikipedia = async (params, articlename) => {
+        try {
+            const response = await fetch(
+                `https://en.wikipedia.org/w/rest.php/v1/search/page?q=${articlename}&limit=1`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                        'Content-Type': 'application/json'
                     }
-                    const json = await response.json();
-                    return json.pages[0].title;
-                } catch (error) {
-                    console.error(error);
-                    return '<ERROR>';
                 }
+            );
+            if (!response.ok) {
+                console.error(response);
+                return '<NO RESULTS>';
             }
-        });
+            const json = await response.json();
+            return json.pages[0].title;
+        } catch (error) {
+            console.error(error);
+            return '<ERROR>';
+        }
+    }
+    const fstr = new FuncyStr({
+        PRONOUN: (params, he, she, they) => params.pronoun === 'he' ? he : params.pronoun === 'she' ? she : they,
+        ARTICLE_NAME: (params) => params.article_name,
+        FETCHREMOTE: asyncFetchFromWikipedia
+    });
 
+    it('should resolve an async function', async () => {
         expect(await fstr.process('{{FETCHREMOTE|earth}}', {})).to.equal('Earth');
         expect(await fstr.process('{{FETCHREMOTE|func}}', {})).to.equal('Function (computer programming)');
+    });
+
+    it('should resolve an async function with other functions', async () => {
+        expect(await fstr.process(
+            '{{FETCHREMOTE|earth}} said {{PRONOUN|he|she|they}} wants to go.',
+            { pronoun: 'they' }
+        )).to.equal('Earth said they wants to go.');
+    });
+
+    it('should resolve an async function with a nested function', async () => {
+        expect(await fstr.process(
+            '{{FETCHREMOTE|{{ARTICLE_NAME}}}} fetches the first result from Wikipedia for "{{ARTICLE_NAME}}".',
+            { article_name: 'func' }
+        )).to.equal('Function (computer programming) fetches the first result from Wikipedia for "func".');
     });
 });
 
