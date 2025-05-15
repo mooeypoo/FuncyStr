@@ -34,15 +34,15 @@ jobs:
 #          mkdir -p demo/public/lib
 #          cp -r dist/* demo/public/lib/
 
-      - name: Install demo dependencies
+      - name: Install docs dependencies
         run: |
-          cd demo
+          cd docs
           npm install
 
-      - name: Build demo
+      - name: Build docs
         run: |
-          cd demo
-          npm run build
+          cd docs
+          npm run docs:build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -50,7 +50,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'demo/dist'
+          path: 'docs/.vitepress/dist'
 
   deploy:
     environment:

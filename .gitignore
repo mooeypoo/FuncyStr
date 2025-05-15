@@ -2,3 +2,4 @@ node_modules/
 dist/
 ctrf/
 demo/public/lib/
+docs/lib/
