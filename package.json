@@ -1,6 +1,6 @@
 {
   "name": "funcystr",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "Moriel Schottlender <mooeypoo@gmail.com>",
   "description": "A lightweight JavaScript library for processing strings with embedded functions.",
   "type": "module",

@@ -156,31 +156,31 @@ describe('FuncyStr process', () => {
 
     // Loop through the test cases and run each one
     cases.forEach(({ name, test, result }) => {
-        it(name, () => {
+        it(name, async () => {
             const { input, params } = test;
-            expect(fstr.process(input, params)).to.equal(result);
+            expect( await fstr.process(input, params)).to.equal(result);
         });
     });
 
     // Special case for deeply nested functions
-    it('should resolve deeply nested functions', () => {
+    it('should resolve deeply nested functions', async () => {
         const input = "This is a {{PLURAL|{{PRONOUN|{{PLURAL|man|men}}|{{PLURAL|woman|women}}}}|people}}.";
         expect(
-            fstr.process(
+            await fstr.process(
                 input,
                 { pronoun: 'she', plural: false }
             )
         ).to.equal("This is a woman.");
 
         expect(
-            fstr.process(
+            await fstr.process(
                 input,
                 { pronoun: 'they', plural: true }
             )
         ).to.equal("This is a people.");
 
         expect(
-            fstr.process(
+            await fstr.process(
                 input,
                 { pronoun: 'he', plural: false }
             )
@@ -188,9 +188,58 @@ describe('FuncyStr process', () => {
     });
 });
 
+describe('FuncyStr async functions', () => {
+    const asyncFetchFromWikipedia = async (params, articlename) => {
+        try {
+            const response = await fetch(
+                `https://en.wikipedia.org/w/rest.php/v1/search/page?q=${articlename}&limit=1`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            if (!response.ok) {
+                console.error(response);
+                return '<NO RESULTS>';
+            }
+            const json = await response.json();
+            return json.pages[0].title;
+        } catch (error) {
+            console.error(error);
+            return '<ERROR>';
+        }
+    }
+    const fstr = new FuncyStr({
+        PRONOUN: (params, he, she, they) => params.pronoun === 'he' ? he : params.pronoun === 'she' ? she : they,
+        ARTICLE_NAME: (params) => params.article_name,
+        FETCHREMOTE: asyncFetchFromWikipedia
+    });
+
+    it('should resolve an async function', async () => {
+        expect(await fstr.process('{{FETCHREMOTE|earth}}', {})).to.equal('Earth');
+        expect(await fstr.process('{{FETCHREMOTE|func}}', {})).to.equal('Function (computer programming)');
+    });
+
+    it('should resolve an async function with other functions', async () => {
+        expect(await fstr.process(
+            '{{FETCHREMOTE|earth}} said {{PRONOUN|he|she|they}} wants to go.',
+            { pronoun: 'they' }
+        )).to.equal('Earth said they wants to go.');
+    });
+
+    it('should resolve an async function with a nested function', async () => {
+        expect(await fstr.process(
+            '{{FETCHREMOTE|{{ARTICLE_NAME}}}} fetches the first result from Wikipedia for "{{ARTICLE_NAME}}".',
+            { article_name: 'func' }
+        )).to.equal('Function (computer programming) fetches the first result from Wikipedia for "func".');
+    });
+});
 
 describe('FuncyStr process demo string', () => {
-    it('should resolve the demo string', () => {
+    it('should resolve the demo string', async () => {
         const str = `Hello, {{uppercase|world}}!
             The length is {{length|Hello world}}. We can also try {{uppercase|{{reverse|detsen}} functions}}.
             This is {{UPPERCASE|{{NOTRECOGNIZED|one|two}}}}
@@ -204,7 +253,7 @@ describe('FuncyStr process demo string', () => {
             REPEAT: (params, text, times) => text.repeat(parseInt(times)),
         });
 
-        expect(fstr.process(str, { pronoun: 'they' })).to.equal(
+        expect(await fstr.process(str, { pronoun: 'they' })).to.equal(
             `Hello, WORLD!
             The length is 11. We can also try NESTED FUNCTIONS.
             This is {{NOTRECOGNIZED|ONE|TWO}}
@@ -212,7 +261,7 @@ describe('FuncyStr process demo string', () => {
             They went to the store and bought themselves groceries and carried them home.`
         );
 
-        expect(fstr.process(str, { pronoun: 'she' })).to.equal(
+        expect(await fstr.process(str, { pronoun: 'she' })).to.equal(
             `Hello, WORLD!
             The length is 11. We can also try NESTED FUNCTIONS.
             This is {{NOTRECOGNIZED|ONE|TWO}}

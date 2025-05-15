@@ -35,7 +35,7 @@ const fstr = new FuncyStr({
     PLURAL: (params, one, plural) => (params.plural ? plural : one),
 });
 
-const result = fstr.process("{{He is|She is|They are}} very welcome to join us.", { pronoun: 'he' });
+const result = await fstr.process("{{He is|She is|They are}} very welcome to join us.", { pronoun: 'he' });
 console.log(result); // Output: "He is very welcome to join us."
 ```
 
@@ -43,14 +43,15 @@ console.log(result); // Output: "He is very welcome to join us."
 
 ```javascript
 const input = "{{PLURAL|This is|These are}} lovely {{PRONOUN|{{PLURAL|man|men}}|{{PLURAL|woman|women}}|{{PLURAL|person|people}}}}.";
-const result = fstr.process(input, { pronoun: 'they', plural: true });
+
+const result = await fstr.process(input, { pronoun: 'they', plural: true });
 console.log(result); // Output: "These are lovely people."
 ```
 
 ### Handling Missing Functions
 
 ```javascript
-const result = fstr.process("This is a {{UNKNOWN|arg1|arg2}}.", {});
+const result = await fstr.process("This is a {{UNKNOWN|arg1|arg2}}.", {});
 console.log(result); // Output: "This is a {{UNKNOWN|arg1|arg2}}."
 ```
 ## Testing
