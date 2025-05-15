@@ -9,8 +9,11 @@ hero:
       text: Get Started
       link: /guide/
     - theme: alt
+      text: Examples
+      link: /examples/
+    - theme: alt
       text: View on GitHub
-      link: https://github.com/moriel/funcystr
+      link: https://github.com/mooeypoo/funcystr
 features:
   - title: Simple Syntax
     details: Use a simple {{function|param1|param2}} syntax to embed function calls within your strings.
