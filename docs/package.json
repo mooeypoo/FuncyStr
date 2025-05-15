@@ -10,5 +10,8 @@
     "docs:preview": "vitepress preview"
   },
   "author": "Moriel Schottlender <mooeypoo@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "vitepress": "^1.6.3"
+  }
 }
