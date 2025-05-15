@@ -23,7 +23,7 @@ const funcyStr = new FuncyStr({
 The result of processing strings given the above functions depend on the values of the parameters:
 
 ```js
-  funcyStr.process(
+  result = await funcyStr.process(
     '{{charname}} went to the store and bought \
     {{pronoun|himself|herself|themselves}} the groceries \
     {{pronoun|he|she|they}} wanted most.',
@@ -42,7 +42,7 @@ The result of processing strings given the above functions depend on the values 
 If we run this with different parameters, the output will change accordingly:
 
 ```js
-  funcyStr.process(
+  result = await funcyStr.process(
     '{{charname}} went to the store and bought \
     {{pronoun|himself|herself|themselves}} the groceries \
     {{pronoun|he|she|they}} wanted most.',

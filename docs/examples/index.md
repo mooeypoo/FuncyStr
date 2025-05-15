@@ -6,6 +6,10 @@ This page demonstrates basic usage of FuncyStr with interactive examples.
 
 Instantiating the library with base functions, you can use those to process functions within the text. All functions given to FuncyStr must include `params` as the first parameter, even if they don't use it.
 
+::: warning
+As of funcystr v2.0, the result of the `process` operation is now a Promise that resolves into the processed string. This allows the use of advanced async functions.
+:::
+
 ```js
   const funcyStr = new FuncyStr({
     uppercase: (params, str) => str.toUpperCase(),
@@ -16,7 +20,7 @@ Instantiating the library with base functions, you can use those to process func
 We can process strings directly, without needing external parameters.
 
 ```js
-  funcyStr.process(
+  result = await funcyStr.process(
     "{{uppercase|this}} is a demo that is {{repeat|really |3}} simple."
   )
 ```
