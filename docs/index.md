@@ -20,4 +20,6 @@ features:
     details: Define your own functions or use built-in ones for common string operations.
   - title: Nested Support
     details: Support for nested function calls and multiple functions within a single string.
+  - title: Async Functions
+    details: Utilize asynchronous functions to fetch data from remote sources.
 --- 

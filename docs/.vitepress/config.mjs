@@ -27,7 +27,7 @@ export default defineConfig({
           text: 'Examples',
           items: [
             { text: 'Basic Usage', link: '/examples/' },
-            { text: 'Dynamic Parameters', link: '/examples/params' },
+            { text: 'Advanced Usage', link: '/examples/advanced' },
             // { text: 'Markdown Processing', link: '/examples/markdown' }
           ]
         }
