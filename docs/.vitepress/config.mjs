@@ -8,7 +8,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
-      // { text: 'Guide', link: '/guide/' },
+      { text: 'Guide', link: '/guide/' },
       { text: 'Examples', link: '/examples/' },
       { text: 'GitHub', link: 'https://github.com/mooeypoo/funcystr' }
     ],
