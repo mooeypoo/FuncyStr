@@ -73,10 +73,10 @@ class FuncyStr {
      * @param {*} params - Context object passed as the first parameter to the function.
      * @returns {*} The result of the function call.
      */
-    #runFunc(name, args, params) {
+    async #runFunc(name, args, params) {
         name = name.toLowerCase()
         if (typeof this.getFunc(name) === 'function') {
-            return this.getFunc(name)(params, ...args)
+            return await this.getFunc(name)(params, ...args)
         }
     }
 
@@ -88,20 +88,20 @@ class FuncyStr {
      * @param {*} params - Context object passed to the function.
      * @returns {string} The result of the function call or a placeholder if the function doesn't exist.
      */
-    #evaluateFunction(str, params) {
+    async #evaluateFunction(str, params) {
         const innerMatch = str.match(this.#regexlookup);
         if (!innerMatch) return str;
 
         const funcString = innerMatch[1];
         if (funcString.includes('{{')) {
             // If there are nested functions, resolve them first
-            return this.process.call(this, funcString, params);
+            return await this.process.call(this, funcString, params);
         }
         const [funcName, ...args] = funcString.split('|');
 
         // Call the corresponding function from the function map
         if (this.#funcs[funcName.toLowerCase()]) {
-            const funcResult = this.#runFunc.call(this, funcName, args, params)
+            const funcResult = await this.#runFunc.call(this, funcName, args, params)
 
             // If the internal result of the function passes the regex
             // lookup, we want to keep it so it can then be processed.
@@ -157,7 +157,7 @@ class FuncyStr {
      * @param {*} params - Context object passed to all functions.
      * @returns {string} The processed string with all function calls evaluated.
      */
-    process(str, params) {
+    async process(str, params) {
         // Prepare the string by replacing single brackets
         // that are not part of a pair
         str = str
@@ -166,7 +166,8 @@ class FuncyStr {
 
         // Replace all functions in the string recursively
         while (str.match(this.#regexlookup)) {
-            str = str.replace(this.#regexlookup, this.#evaluateFunction.apply(this, [str, params]));
+            const newstr = await this.#evaluateFunction.apply(this, [str, params])
+            str = str.replace(this.#regexlookup, newstr);
         }
 
         // Replace the temporary markers with the original {{ }} and return
