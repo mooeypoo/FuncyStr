@@ -2,7 +2,7 @@
   "name": "funcystr",
   "version": "1.0.0",
   "author": "Moriel Schottlender <mooeypoo@gmail.com>",
-  "description": "A library that allows the creation and execution of functions within strings.",
+  "description": "A lightweight JavaScript library for processing strings with embedded functions.",
   "type": "module",
   "license": "MIT",
   "repository": {
@@ -21,8 +21,14 @@
     "build": "microbundle",
     "dev": "microbundle watch",
     "test": "mocha --require @babel/register --reporter mocha-multi-reporters --reporter-options configFile=config.json",
-    "prepare-demo-files": "npm run build && mkdir -p demo/public/lib && cp -r dist/* demo/public/lib/"
+    "prepare-demo-files": "npm run build && mkdir -p docs/lib && cp -r dist/* docs/lib/"
   },
+  "keywords": [
+    "string",
+    "template",
+    "function",
+    "processing"
+  ],
   "devDependencies": {
     "@babel/cli": "^7.27.0",
     "@babel/core": "^7.26.10",
