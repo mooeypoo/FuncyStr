@@ -12,6 +12,7 @@
   "author": "Moriel Schottlender <mooeypoo@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "sass-embedded": "^1.88.0",
     "vitepress": "^1.6.3"
   }
 }
