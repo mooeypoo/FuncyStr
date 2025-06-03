@@ -1,6 +1,8 @@
 # Introduction
 
-FuncyStr is a lightweight JavaScript library designed to process strings with embedded functions. It allows dynamic string resolution based on provided parameters, supporting nested and multiple function calls within a single string.
+FuncyStr (pronounced "Funky string") is a lightweight JavaScript library designed to process strings with embedded functions. It allows dynamic string resolution based on provided parameters, supporting nested and multiple function calls within a single string. 
+
+The library was inspired by [MediaWiki's internationalization system](https://github.com/wikimedia/banana-i18n?tab=readme-ov-file).
 
 ## Features
 

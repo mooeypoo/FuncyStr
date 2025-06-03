@@ -12,7 +12,7 @@ Use this page to test `FuncyStr` features dynamically. For this demo, the follow
 :::
 
 
-::: details Instantiation code example
+## Instantiation code example
 This code should only serve as an example for this demo purposes only. Before using this in your app, make sure there's proper validation of inputs, especially if the code runs on the server.
 ```js
 const fstr = new FuncyStr({
@@ -43,8 +43,10 @@ const fstr = new FuncyStr({
 });
 
 ```
-:::
 
+## Interactive example
+
+You can change and edit the textbox below to see how the system processes inputs given the commands it was given. Change the values of the pronoun select and name input to see how the system takes parameters into account.
 
 <div class="interactive-demo">
     <div class="demo-input">
@@ -71,10 +73,11 @@ const fstr = new FuncyStr({
         </div>
     </div>
     <div class="demo-result">
+        <div class="demo-result-header">String preview</div>
         <textarea disabled>{{ demoOutput }}</textarea>
     </div>
     <div class="demo-preview">
-        <div class="demo-preview-header">Preview</div>
+        <div class="demo-preview-header">HTML preview</div>
         <div class="demo-preview-output" v-html="demoOutput"></div>
     </div>
 </div>
@@ -141,9 +144,13 @@ async function runProcess() {
 
     textarea {
         width: 100%;
-        background-color: #202127;
+        background-color: #d7dce5;
         padding: 1em;
         height: 200px;
+
+        :root.dark & {
+            background-color: #202127;
+        }
     }
 
     .demo-input {
@@ -157,10 +164,13 @@ async function runProcess() {
         flex-grow: 2;
         justify-content: space-around;
         align-items: flex-end;
-        background-color: #1d2f41;
+        background-color: #8c9dba;
         font-size: 0.875em;
         padding: 0.5em;
 
+        :root.dark & {
+            background-color: #1d2f41;
+        }
 
         &-options {
             display: flex;
@@ -220,6 +230,11 @@ async function runProcess() {
     }
 
     .demo-result {
+        &-header {
+           font-family: monospace;
+            font-size: 0.7em;
+        }
+
         textarea {
             height: 200px;
         }
