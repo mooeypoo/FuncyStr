@@ -1,6 +1,8 @@
 # Basic Examples
 
-This page demonstrates basic usage of FuncyStr with interactive examples.
+This page demonstrates basic usage of FuncyStr with code examples. You can also test the functionality through the [interactive demo](../demo/) page.
+
+ (dynamic demo)[].
 
 ## Basic String Processing
 

@@ -2,7 +2,7 @@
 
 As of version 2.0, funcystr allows for the use of asynchronous functions in the functions given during instantiation. This allows for more robust functionality like fetching remote assets or performing heavier calculations.
 
-## Example: Fetching remote data
+## Fetching remote data
 
 Starting from version 2.0, funcystr allows for the use of `async` functions. This opens the door for advanced features, like fetching from remote sources or performing more advanced operations.
 
