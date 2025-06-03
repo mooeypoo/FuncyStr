@@ -6,10 +6,11 @@ The library was inspired by [MediaWiki's internationalization system](https://gi
 
 ## Features
 
-- **Dynamic String Resolution**: Replace placeholders in strings with dynamic values based on provided parameters.
-- **Custom Functions**: Define your own functions to handle specific placeholders.
-- **Nested Functions**: Supports resolving functions within other functions.
-- **Graceful Handling**: Leaves unresolved placeholders intact if no matching function is defined.
+- **Dynamic string resolution**: Replace placeholders in strings with dynamic values based on provided parameters.
+- **Custom functions**: Define your own functions to handle specific placeholders.
+- **Nested functions**: Supports resolving functions within other functions.
+- **Asynchronous functions**: Define functions that fetch data from remote sources.
+- **Graceful handling**: Leaves unresolved placeholders intact if no matching function is defined.
 
 ## License
 

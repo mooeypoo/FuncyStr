@@ -25,7 +25,7 @@ Processes a string and resolves all placeholders.
 
 ## Usage
 
-### Basic Example
+### Basic example
 
 ```javascript
 import FuncyStr from 'funcystr';
@@ -39,7 +39,7 @@ const result = await fstr.process("{{He is|She is|They are}} very welcome to joi
 console.log(result); // Output: "He is very welcome to join us."
 ```
 
-### Nested Functions
+### Nested functions
 
 ```javascript
 const input = "{{PLURAL|This is|These are}} lovely {{PRONOUN|{{PLURAL|man|men}}|{{PLURAL|woman|women}}|{{PLURAL|person|people}}}}.";
@@ -48,7 +48,7 @@ const result = await fstr.process(input, { pronoun: 'they', plural: true });
 console.log(result); // Output: "These are lovely people."
 ```
 
-### Handling Missing Functions
+### Handling missing functions
 
 ```javascript
 const result = await fstr.process("This is a {{UNKNOWN|arg1|arg2}}.", {});
